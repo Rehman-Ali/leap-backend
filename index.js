@@ -7,6 +7,7 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const http = require("http");
 const homePageRoute = require("./routers/index");
+const userRoute = require("./routers/userRoutes");
 var app = express();
 app.use(morgan("dev"));
 app.use(cors());
@@ -22,6 +23,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 //// ****** DEFINE ALL ROUTES HERE ******** ///////
 app.use("/", homePageRoute);
+app.use("/user", userRoute);
 
 
 const PORT = process.env.PORT || "5000";
