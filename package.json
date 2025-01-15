@@ -1,0 +1,20 @@
+{
+  "name": "wa-gateway",
+  "version": "3.2.2",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js --ignore ./wa_credentials --ignore ./public",
+    "production": "node server.js -- --staging"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "http": "^0.0.1-security",
+    "mongoose": "^8.7.0",
+    "morgan": "^1.10.0",
+    "path": "^0.12.7"
+  }
+}
