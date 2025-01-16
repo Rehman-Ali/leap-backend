@@ -1,24 +1,23 @@
 const mongoose = require("mongoose");
+const Joi = require("joi");
 
 const UserSchema = new mongoose.Schema(
   {
-    first_name: {
-      type: String,
+    /// dp word is stand for Dynamic.xyz platfrom its prefix that uses in all site
+    dp_user_id: {
+      type: String
     },
-    last_name: {
-        type: String,
-    },
-    email:{
-        type: String
-    },
-    dynamic_user_id:{
-        type: String
-    }
   },
-  { timestamps: false }
+  { timestamps: true }
 );
-
 
 const User = mongoose.model("User", UserSchema);
 
+function validateUser(user) {
+  const schema = Joi.object({
+    dp_user_id: Joi.string(),
+  });
+  return schema.validate(user);
+}
 exports.User = User;
+exportsvalidate = validateUser;

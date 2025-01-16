@@ -5,13 +5,11 @@ const router = express.Router();
 
 
 
-////////////////////////////////////
-///////// REGITSER USER ///////////
-////////////////////////////////////
+/////////////////////////////////////////////
+///////// SIGNUP AND SIGNIN USER ///////////
+///////////////////////////////////////////
 
-router.route("/").get(userController.test);
-router.route("/logout").post(userController.logout);
-// router.route("/register").get(authentication.auth, userController.me);
+router.route("/signin-and-signup").post(userController.singinAndSignup);
 
 
 

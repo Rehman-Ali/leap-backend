@@ -31,7 +31,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 //// ****** DEFINE ALL ROUTES HERE ******** ///////
 app.use("/", homePageRoute);
-app.use("/user", userRoute);
+app.use("/api/user", userRoute);
 /////////////////////////////////////////////////
 
 
