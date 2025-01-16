@@ -184,3 +184,14 @@ exports.logout = tryCatcheHanlder(async (req, res, next) => {
   });
   
   
+
+///////////////////////////////////////////////////////////
+///////////////// test function //////////////
+///////////////////////////////////////////////////////////
+
+exports.test= tryCatcheHanlder(async (req, res, next) => {
+  res.send('Hello, Vercel!');
+});
+
+
+  
