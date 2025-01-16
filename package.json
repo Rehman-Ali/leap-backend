@@ -1,11 +1,11 @@
 {
   "name": "leap",
   "version": "3.2.2",
-  "main": "index.js",
+  "main": "api/index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
-    "production": "node index.js"
+    "start": "node api/index.js",
+    "dev": "nodemon api/index.js",
+    "production": "node api/index.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
