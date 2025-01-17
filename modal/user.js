@@ -20,4 +20,4 @@ function validateUser(user) {
   return schema.validate(user);
 }
 exports.User = User;
-exportsvalidate = validateUser;
+exports.validate = validateUser;
