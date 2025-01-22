@@ -41,7 +41,7 @@ exports.createOrder = tryCatcheHanlder(async (req, res, next) => {
 //////////////////////////////////////
 exports.getAllOrder = tryCatcheHanlder(async (req, res, next) => {
   
-  console.log(req.body, "res body------")
+ 
 
   const orders = await Order.findAll({
     user_id: req.user.id
