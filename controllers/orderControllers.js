@@ -1,4 +1,5 @@
 const { Order, validate } = require("../modal/order");
+const { User } = require("../modal/user");
 const tryCatcheHanlder = require("../utils/tryCatch");
 
 
@@ -7,7 +8,7 @@ const tryCatcheHanlder = require("../utils/tryCatch");
 //////////////////////////////////////
 exports.createOrder = tryCatcheHanlder(async (req, res, next) => {
   
-  console.log(req.body, "res body------")
+  console.log(req.body, req.user, "res body------")
    
   const { error } = validate(req.body);
 
@@ -19,7 +20,7 @@ exports.createOrder = tryCatcheHanlder(async (req, res, next) => {
   }
 
   const userExited = await User.findOne({
-    _id: req.user.id
+    _id: req.user.user_id
   });
 
   /// if user exist simple allow to him to login
@@ -28,7 +29,7 @@ exports.createOrder = tryCatcheHanlder(async (req, res, next) => {
   }
 
   // if user new then save it to database and allow him to login
-  const order = await Order.create(req.body);
+  const order = await Order.create({...req.body,  user_id:req.user.user_id});
 
   return res.status(200).json({success: 1,  data: order, message: "Order is added successfully"})
 });
@@ -54,7 +55,7 @@ exports.getAllOrder = tryCatcheHanlder(async (req, res, next) => {
 ////////////////////////////////////////
 /////////// GET single Order 👤 ///////////
 //////////////////////////////////////
-exports.getAllOrder = tryCatcheHanlder(async (req, res, next) => {
+exports.getSingleOrder = tryCatcheHanlder(async (req, res, next) => {
   
   console.log(req.body, "res body------")
 

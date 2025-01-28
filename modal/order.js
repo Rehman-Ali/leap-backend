@@ -18,17 +18,26 @@ const OrderSchema = new mongoose.Schema(
     price: {
       type: String
     },
+    price_in_SOL: {
+      type: String
+    },
     order_category: {
       type: String,
       enum: ["vps", "rpc"]
     },
     operating_system: {
       type: String,
-      enum: ["window", "linux"]
+      enum: ["windows", "linux"]
     },
     user_id: {
       type: Schema.Types.ObjectId,
       ref: "User"
+    },
+    region: {
+      type : String
+    },
+    plan:{
+      type: String
     }
   },
   { timestamps: true }
@@ -42,8 +51,11 @@ function validateOrder(order) {
     duration: Joi.string(),
     status: Joi.string(),
     price: Joi.string(),
+    price_in_SOL: Joi.string(),
     order_category: Joi.string(),
-    operating_system: Joi.string()
+    operating_system: Joi.string(),
+    region: Joi.string(),
+    plan: Joi.string(),
   });
   return schema.validate(order);
 }
