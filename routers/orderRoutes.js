@@ -1,0 +1,30 @@
+const express = require("express");
+const orderController = require("../controllers/orderControllers");
+const auth = require("../middleware/auth");
+const router = express.Router();
+
+
+
+/////////////////////////////////////////////
+///////// CREATE ORDER /////////////////////
+///////////////////////////////////////////
+
+router.route("/create").post(auth, orderController.createOrder);
+
+/////////////////////////////////////////////
+///////// GET ALL ORDERS ///////////////////
+///////////////////////////////////////////
+
+router.route("/get-all").post(orderController.getAllOrder);
+
+/////////////////////////////////////////////
+///////// GET SINGLE ORDER /////////////////
+///////////////////////////////////////////
+
+router.route("/get-single").post(orderController.getSingleOrder);
+
+
+
+
+
+module.exports = router;

@@ -8,6 +8,7 @@ const cors = require("cors");
 const http = require("http");
 const homePageRoute = require("../routers/index");
 const userRoute = require("../routers/userRoutes");
+const orderRoute = require("../routers/orderRoutes");
 
 const app = express();
 
@@ -32,6 +33,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //// ****** DEFINE ALL ROUTES HERE ******** ///////
 app.use("/", homePageRoute);
 app.use("/api/user", userRoute);
+app.use("/api/order", orderRoute);
 /////////////////////////////////////////////////
 
 
