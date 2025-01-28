@@ -1,10 +1,11 @@
 {
-  "name": "wa-gateway",
+  "name": "leap",
   "version": "3.2.2",
+  "main": "api/index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js --ignore ./wa_credentials --ignore ./public",
-    "production": "node server.js -- --staging"
+    "start": "node api/index.js",
+    "dev": "nodemon api/index.js",
+    "production": "node api/index.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
