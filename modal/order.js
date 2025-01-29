@@ -9,7 +9,6 @@ const OrderSchema = new mongoose.Schema(
     /// dp word is stand for Dynamic.xyz platfrom its prefix that uses in all site
     duration: {
       type: String,
-      enum: ["month", "year"]
     },
     status: {
       type: String,
