@@ -15,7 +15,7 @@ const OrderSchema = new mongoose.Schema(
       enum: ["cancelled", "pending", "success"]
     },
     price: {
-      type: String
+      type: Number
     },
     price_in_SOL: {
       type: String
@@ -49,7 +49,7 @@ function validateOrder(order) {
     user_id: Joi.objectId(),
     duration: Joi.string(),
     status: Joi.string(),
-    price: Joi.string(),
+    price: Joi.number(),
     price_in_SOL: Joi.string(),
     order_category: Joi.string(),
     operating_system: Joi.string(),
