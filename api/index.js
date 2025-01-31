@@ -9,6 +9,7 @@ const http = require("http");
 const homePageRoute = require("../routers/index");
 const userRoute = require("../routers/userRoutes");
 const orderRoute = require("../routers/orderRoutes");
+const articleRoute = require("../routers/articleRoutes");
 
 const app = express();
 
@@ -34,6 +35,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/", homePageRoute);
 app.use("/api/user", userRoute);
 app.use("/api/order", orderRoute);
+app.use("/api/article", articleRoute);
 /////////////////////////////////////////////////
 
 
@@ -42,15 +44,15 @@ app.use("/api/order", orderRoute);
 
 
 //////********** FOR Local Host ******//////////////
-// const PORT = process.env.PORT || "5000";
-// app.set("port", PORT);
+const PORT = process.env.PORT || "5000";
+app.set("port", PORT);
 
-// var server = http.createServer(app);
-// server.on("listening", () => console.log("APP IS RUNNING ON PORT " + PORT));
+var server = http.createServer(app);
+server.on("listening", () => console.log("APP IS RUNNING ON PORT " + PORT));
 
-// server.listen(PORT);
+server.listen(PORT);
 
 
 
 //// for vercel deployment///////
-module.exports = app; // Export the Express app
+// module.exports = app; // Export the Express app
