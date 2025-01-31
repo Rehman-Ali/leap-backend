@@ -9,6 +9,7 @@ const http = require("http");
 const homePageRoute = require("../routers/index");
 const userRoute = require("../routers/userRoutes");
 const orderRoute = require("../routers/orderRoutes");
+const articleRoute = require("../routers/articleRoutes");
 
 const app = express();
 
@@ -34,6 +35,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/", homePageRoute);
 app.use("/api/user", userRoute);
 app.use("/api/order", orderRoute);
+app.use("/api/article", articleRoute);
 /////////////////////////////////////////////////
 
 
