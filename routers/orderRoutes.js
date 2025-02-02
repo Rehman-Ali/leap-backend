@@ -15,13 +15,13 @@ router.route("/create").post(auth, orderController.createOrder);
 ///////// GET ALL ORDERS ///////////////////
 ///////////////////////////////////////////
 
-router.route("/get-all").post(orderController.getAllOrder);
+router.route("/all").get(orderController.getAllOrder);
 
 /////////////////////////////////////////////
 ///////// GET SINGLE ORDER /////////////////
 ///////////////////////////////////////////
 
-router.route("/get-single").post(orderController.getSingleOrder);
+router.route("/get-single").get(orderController.getSingleOrder);
 
 
 

@@ -7,6 +7,11 @@ const UserSchema = new mongoose.Schema(
     dp_user_id: {
       type: String
     },
+    role: {
+      type: String,
+      enum: ["admin" ,"user"],
+      default: "user"
+    }
   },
   { timestamps: true }
 );
@@ -16,6 +21,7 @@ const User = mongoose.model("User", UserSchema);
 function validateUser(user) {
   const schema = Joi.object({
     dp_user_id: Joi.string(),
+    role: Joi.string(),
   });
   return schema.validate(user);
 }

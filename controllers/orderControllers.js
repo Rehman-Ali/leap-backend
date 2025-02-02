@@ -44,9 +44,7 @@ exports.getAllOrder = tryCatcheHanlder(async (req, res, next) => {
   
  
 
-  const orders = await Order.findAll({
-    user_id: req.user.id
-  });
+  const orders = await Order.find();
 
   return res.status(200).json({success: 1,  data: orders, message: "Get all order list."})
 });

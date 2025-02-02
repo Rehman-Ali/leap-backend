@@ -12,5 +12,13 @@ const router = express.Router();
 router.route("/signin-and-signup").post(userController.singinAndSignup);
 
 
+/////////////////////////////////////////////
+///////// GET all user  ///////////
+///////////////////////////////////////////
+
+router.route("/all").get(userController.allUser);
+
+
+
 
 module.exports = router;

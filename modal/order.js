@@ -18,7 +18,7 @@ const OrderSchema = new mongoose.Schema(
       type: Number
     },
     price_in_SOL: {
-      type: String
+      type: Number
     },
     order_category: {
       type: String,
@@ -50,7 +50,7 @@ function validateOrder(order) {
     duration: Joi.string(),
     status: Joi.string(),
     price: Joi.number(),
-    price_in_SOL: Joi.string(),
+    price_in_SOL: Joi.number(),
     order_category: Joi.string(),
     operating_system: Joi.string(),
     region: Joi.string(),

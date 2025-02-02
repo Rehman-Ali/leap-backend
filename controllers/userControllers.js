@@ -17,7 +17,8 @@ const createSendToken = (user, res) => {
     token: {
       token,
       _id: user._id,
-      dp_user_id: user.dp_user_id
+      dp_user_id: user.dp_user_id,
+      role: user.role
     }
   });
 };
@@ -51,4 +52,24 @@ exports.singinAndSignup = tryCatcheHanlder(async (req, res, next) => {
   const user = await User.create(req.body);
 
   return createSendToken(user, res);
+});
+
+
+
+//////////////////////////////////////
+////// GET all USER 👤 ////
+//////////////////////////////////////
+exports.allUser = tryCatcheHanlder(async (req, res, next) => {
+  
+  
+  const userList = await User.find({
+    role: "user"
+  });
+
+  
+  return res.status(200).json({
+    success: 1,
+    data: userList,
+    message: "user list get successfully"
+  })
 });
