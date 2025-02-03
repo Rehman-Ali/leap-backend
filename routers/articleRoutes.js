@@ -3,13 +3,19 @@ const articleController = require("../controllers/articleControllers");
 const auth = require("../middleware/auth");
 const router = express.Router();
 
+const multer = require('multer');
+
+
+// Set up multer storage
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 
 /////////////////////////////////////////////
 ///////// CREATE Article /////////////////////
 ///////////////////////////////////////////
 
-router.route("/").post(articleController.createArticle);
+router.route("/").post(upload.single('image'),articleController.createArticle);
 // router.route("/").post(auth, articleController.createArticle);
 
 /////////////////////////////////////////////

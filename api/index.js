@@ -10,7 +10,7 @@ const homePageRoute = require("../routers/index");
 const userRoute = require("../routers/userRoutes");
 const orderRoute = require("../routers/orderRoutes");
 const articleRoute = require("../routers/articleRoutes");
-
+const cloudinary = require('cloudinary').v2;
 const app = express();
 
 
@@ -24,7 +24,12 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-
+// Cloudinary Configuration (make sure you've replaced with your credentials)
+cloudinary.config({
+    cloud_name: 'dr6vcennd',
+    api_key: '274691982799748',
+    api_secret: 'qJfZxD_mhW2vxbD3zwUxesovlvw',
+  });
 
 
 

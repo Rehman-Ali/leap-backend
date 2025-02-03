@@ -1,39 +1,70 @@
-const { Article, validate } = require("../modal/article");
+const { Article } = require("../modal/article");
 const tryCatcheHanlder = require("../utils/tryCatch");
+
+const cloudinary = require('cloudinary').v2;
 
 ////////////////////////////////////////
 /////////// Create Article 👤 ///////////
 //////////////////////////////////////
-exports.createArticle = tryCatcheHanlder(async (req, res, next) => {
-  const { error } = validate(req.body);
+// exports.createArticle = tryCatcheHanlder(async (req, res, next) => {
 
-  if (error) {
+//    console.log(req.body,req.file, "req.body here====")
+
+//   // const articleExited = await Article.findOne({
+//   //   title: req.body.title
+//   // });
+
+//   // /// if user exist simple allow to him to login
+//   // if (articleExited) {
+//   //   return res
+//   //     .status(400)
+//   //     .json({ success: 0, message: "Article existed with this title" });
+//   // }
+
+//   // const article = await Article.create(req.body);
+
+//   return res
+//     .status(200)
+//     .json({
+//       success: 1,
+//       // data: article,
+//       message: "Article is added successfully"
+//     });
+// });
+
+exports.createArticle = tryCatcheHanlder(async (req, res, next) => {
+  console.log('Received files:', req.file);
+  console.log('Received body:', req.body);
+
+  // Check if file exists first
+  if (!req.file) {
     return res.status(400).json({
-      message: "Invalid data",
-      error: error
+      success: 0,
+      message: "No image file uploaded"
     });
   }
 
-  const articleExited = await Article.findOne({
-    title: req.body.title
+  // Upload to Cloudinary
+  const result = await new Promise((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      { resource_type: 'auto' },
+      (error, result) => error ? reject(error) : resolve(result)
+    );
+    
+    uploadStream.end(req.file.buffer);
   });
 
-  /// if user exist simple allow to him to login
-  if (articleExited) {
-    return res
-      .status(400)
-      .json({ success: 0, message: "Article existed with this title" });
-  }
+  // Create article
+  const article = await Article.create({
+    ...req.body,
+    image_url: result.secure_url
+  });
 
-  const article = await Article.create(req.body);
-
-  return res
-    .status(200)
-    .json({
-      success: 1,
-      data: article,
-      message: "Article is added successfully"
-    });
+  return res.status(201).json({
+    success: 1,
+    data: article,
+    message: "Article created successfully"
+  });
 });
 
 ////////////////////////////////////////
