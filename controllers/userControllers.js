@@ -1,6 +1,6 @@
 const { User, validate } = require("../modal/user");
 const jwt = require("jsonwebtoken");
-const GlobalAppError = require("../utils/globalAppError");
+// const GlobalAppError = require("../utils/globalAppError");
 const tryCatcheHanlder = require("../utils/tryCatch");
 
 const createSendToken = (user, res) => {

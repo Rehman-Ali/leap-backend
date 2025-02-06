@@ -64,3 +64,16 @@ exports.getSingleOrder = tryCatcheHanlder(async (req, res, next) => {
   return res.status(200).json({success: 1,  data: orders, message: "Get all order list."})
 });
 
+
+////////////////////////////////////////
+/////////// GET all User Order 👤 ///////////
+//////////////////////////////////////
+exports.getAllUserOrder = tryCatcheHanlder(async (req, res, next) => {
+  
+  const orders = await Order.find({
+    user_id: req.user.user_id
+  });
+
+  return res.status(200).json({success: 1,  data: orders, message: "Get all user order list."})
+});
+
