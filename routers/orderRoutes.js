@@ -28,7 +28,7 @@ router.route("/get-single").get(orderController.getSingleOrder);
 ///////// GET ORER Of USER /////////////////
 ///////////////////////////////////////////
 
-router.route("/user").get(orderController.getAllUserOrder);
+router.route("/user").get(auth, orderController.getAllUserOrder);
 
 
 
