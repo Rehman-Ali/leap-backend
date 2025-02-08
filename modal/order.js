@@ -8,11 +8,11 @@ const OrderSchema = new mongoose.Schema(
   {
     /// dp word is stand for Dynamic.xyz platfrom its prefix that uses in all site
     duration: {
-      type: String,
+      type: Number,
     },
     status: {
       type: String,
-      enum: ["active", "pending", "inactive"]
+      enum: ["active", "pending", "inactive", "cancelled"]
     },
     price: {
       type: Number
@@ -26,7 +26,8 @@ const OrderSchema = new mongoose.Schema(
     },
     operating_system: {
       type: String,
-      enum: ["windows", "linux"]
+      enum: ["windows", "linux"],
+      allow: null
     },
     user_id: {
       type: Schema.Types.ObjectId,
@@ -37,6 +38,9 @@ const OrderSchema = new mongoose.Schema(
     },
     plan:{
       type: String
+    },
+    expiry_date:{
+      type: Date
     }
   },
   { timestamps: true }
@@ -47,14 +51,15 @@ const Order = mongoose.model("Order", OrderSchema);
 function validateOrder(order) {
   const schema = Joi.object({
     user_id: Joi.objectId(),
-    duration: Joi.string(),
+    duration: Joi.number(),
     status: Joi.string(),
     price: Joi.number(),
     price_in_SOL: Joi.number(),
     order_category: Joi.string(),
-    operating_system: Joi.string(),
+    operating_system: Joi.string().allow(null),
     region: Joi.string(),
     plan: Joi.string(),
+    expiry_date: Joi.date(),
   });
   return schema.validate(order);
 }
