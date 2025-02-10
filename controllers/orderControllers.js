@@ -1,6 +1,31 @@
 const { Order, validate } = require("../modal/order");
 const { User } = require("../modal/user");
 const tryCatcheHanlder = require("../utils/tryCatch");
+const axios = require("axios");
+
+// Replace with your Discord webhook URL
+const DISCORD_WEBHOOK_URL =
+  "https://discord.com/api/webhooks/1338599658196566066/yzpTN2UbGrfRNJT3WfBFQn7WDzgZhcWWpok7QFks6DFe2h3FPDI7i8U3cn9nSplTpfap";
+
+async function sendDiscordNotification(orderDetails) {
+  try {
+    const message = {
+      content: `📦 **New Order Received!**\n
+      **Order ID:** ${orderDetails._id}\n
+      **Customer ID:** ${orderDetails.user_id}\n
+      **Category:** $${orderDetails.order_category}\n
+      **Duration:** $${orderDetails.duration}\n
+      **Total USD:** $${orderDetails.price}\n
+      **Total SOL:** $${orderDetails.price_in_SOL}\n
+      **Date:** ${new Date().toLocaleString()}`,
+    };
+
+    await axios.post(DISCORD_WEBHOOK_URL, message);
+    console.log("Discord notification sent.");
+  } catch (error) {
+    console.error("Error sending Discord notification:", error);
+  }
+}
 
 ////////////////////////////////////////
 /////////// Create Order 👤 ///////////
@@ -28,6 +53,9 @@ exports.createOrder = tryCatcheHanlder(async (req, res, next) => {
 
   // if user new then save it to database and allow him to login
   const order = await Order.create({ ...req.body, user_id: req.user.user_id });
+
+  // Send notification to Discord
+  await sendDiscordNotification(order);
 
   return res
     .status(200)
