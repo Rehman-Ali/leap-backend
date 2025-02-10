@@ -27,9 +27,8 @@ const createSendToken = (user, res) => {
 ////// SING UP / REGISTER USER 👤 ////
 //////////////////////////////////////
 exports.singinAndSignup = tryCatcheHanlder(async (req, res, next) => {
-  
-  console.log(req.body, "res body------")
-   
+  console.log(req.body, "res body------");
+
   const { error } = validate(req.body);
 
   if (error) {
@@ -44,6 +43,14 @@ exports.singinAndSignup = tryCatcheHanlder(async (req, res, next) => {
   });
 
   /// if user exist simple allow to him to login
+  if (userIsRegistered.status === "inactive") {
+    return res.status(400).json({
+      message: "Your account is inactive or deleted. Please contact support.",
+      error: error
+    });
+  }
+
+  /// if user exist simple allow to him to login
   if (userIsRegistered) {
     return createSendToken(userIsRegistered, res);
   }
@@ -54,22 +61,37 @@ exports.singinAndSignup = tryCatcheHanlder(async (req, res, next) => {
   return createSendToken(user, res);
 });
 
-
-
 //////////////////////////////////////
 ////// GET all USER 👤 ////
 //////////////////////////////////////
 exports.allUser = tryCatcheHanlder(async (req, res, next) => {
-  
-  
-  const userList = await User.find({
-    role: "user"
-  });
+  const userList = await User.find({});
 
-  
   return res.status(200).json({
     success: 1,
     data: userList,
     message: "user list get successfully"
-  })
+  });
+});
+
+////////////////////////////////////////
+/////////// Update USER 👤 ///////////
+//////////////////////////////////////
+exports.updateUser = tryCatcheHanlder(async (req, res, next) => {
+  let user = await User.findOne({ _id: req.params.id });
+  if (!user)
+    return res.status(400).json({ success: 0, message: "No such user exist." });
+
+  let updateUser = await User.updateOne(
+    { _id: req.params.id },
+    {
+      $set: req.body
+    },
+    { new: true }
+  );
+  return res.status(200).json({
+    success: 1,
+    message: "User has been updated successfully",
+    data: updateUser
+  });
 });

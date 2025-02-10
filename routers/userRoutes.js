@@ -15,4 +15,12 @@ router.route("/signin-and-signup").post(userController.singinAndSignup);
 
 router.route("/all").get(auth, userController.allUser);
 
+
+///////////////////////////////////////////////
+///////// UPDATE USER ///////////////////////
+/////////////////////////////////////////////
+
+router.route("/update/:id").put(auth, userController.updateUser);
+
+
 module.exports = router;

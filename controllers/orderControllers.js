@@ -39,10 +39,28 @@ exports.createOrder = tryCatcheHanlder(async (req, res, next) => {
 //////////////////////////////////////
 exports.getAllOrder = tryCatcheHanlder(async (req, res, next) => {
   const orders = await Order.find();
+  let arr = [];
+
+  for (var i = 0; i < orders.length; i++) {
+    // Calculate the service end date
+    const serviceEndDate = new Date(orders[i].expiry_date);
+
+    // Set the reminder date (2 days before the service ends)
+    const reminderDate = new Date(serviceEndDate);
+    reminderDate.setDate(reminderDate.getDate() - 2);
+    // Get th1e current date
+    const currentDate = new Date();
+    // Check if today is the reminder date or later
+    if (currentDate >= reminderDate) {
+      arr.push({ ...orders[i]._doc, isExpiryNear: true });
+    } else {
+      arr.push({ ...orders[i]._doc, isExpiryNear: false });
+    }
+  }
 
   return res
     .status(200)
-    .json({ success: 1, data: orders, message: "Get all order list." });
+    .json({ success: 1, data: arr, message: "Get all user order list." });
 });
 
 ////////////////////////////////////////

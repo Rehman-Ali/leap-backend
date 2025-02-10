@@ -11,6 +11,11 @@ const UserSchema = new mongoose.Schema(
       type: String,
       enum: ["admin" ,"user"],
       default: "user"
+    },
+    status:{
+      type: String,
+      enum: ['active', 'inactive'],
+      default: "active"
     }
   },
   { timestamps: true }
@@ -22,6 +27,7 @@ function validateUser(user) {
   const schema = Joi.object({
     dp_user_id: Joi.string(),
     role: Joi.string(),
+    status: Joi.string(),
   });
   return schema.validate(user);
 }
