@@ -4,8 +4,8 @@ const tryCatcheHanlder = require("../utils/tryCatch");
 const axios = require("axios");
 
 // Replace with your Discord webhook URL
-const DISCORD_WEBHOOK_URL =
-  "https://discord.com/api/webhooks/1338599658196566066/yzpTN2UbGrfRNJT3WfBFQn7WDzgZhcWWpok7QFks6DFe2h3FPDI7i8U3cn9nSplTpfap";
+const DISCORD_WEBHOOK_URL = "https://canary.discord.com/api/webhooks/1338613668241211412/eE399Z9LoZ4NcUkxOAOoXBlrDk02c-gW-OBdj1QqMfMukMI3ZgU35rF5HGcjMRMdEsQP";
+  // "https://discord.com/api/webhooks/1338599658196566066/yzpTN2UbGrfRNJT3WfBFQn7WDzgZhcWWpok7QFks6DFe2h3FPDI7i8U3cn9nSplTpfap";
 
 async function sendDiscordNotification(orderDetails) {
   try {
@@ -13,10 +13,10 @@ async function sendDiscordNotification(orderDetails) {
       content: `📦 **New Order Received!**\n
       **Order ID:** ${orderDetails._id}\n
       **Customer ID:** ${orderDetails.user_id}\n
-      **Category:** $${orderDetails.order_category}\n
-      **Duration:** $${orderDetails.duration}\n
+      **Category:** ${orderDetails.order_category.toUpperCase()}\n
+      **Duration:** ${orderDetails.duration/30} month\n
       **Total USD:** $${orderDetails.price}\n
-      **Total SOL:** $${orderDetails.price_in_SOL}\n
+      **Total SOL:** ${orderDetails.price_in_SOL} SOL\n
       **Date:** ${new Date().toLocaleString()}`,
     };
 

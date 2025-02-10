@@ -22,7 +22,7 @@ const OrderSchema = new mongoose.Schema(
     },
     order_category: {
       type: String,
-      enum: ["vps", "rpc"]
+      enum: ["vps", "rpc-basic", "rpc-pro"]
     },
     operating_system: {
       type: String,
