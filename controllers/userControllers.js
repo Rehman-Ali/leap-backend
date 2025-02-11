@@ -43,11 +43,13 @@ exports.singinAndSignup = tryCatcheHanlder(async (req, res, next) => {
   });
 
   /// if user exist simple allow to him to login
-  if (userIsRegistered.status === "inactive") {
-    return res.status(400).json({
-      message: "Your account is inactive or deleted. Please contact support.",
-      error: error
-    });
+  if (userIsRegistered) {
+    if (userIsRegistered.status === "inactive") {
+      return res.status(400).json({
+        message: "Your account is inactive or deleted. Please contact support.",
+        error: error
+      });
+    }
   }
 
   /// if user exist simple allow to him to login

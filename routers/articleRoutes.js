@@ -22,20 +22,20 @@ router
 ///////// GET ALL Article ///////////////////
 ///////////////////////////////////////////
 
-router.route("/all").get(auth, articleController.getAllArticle);
+router.route("/all").get(articleController.getAllArticle);
 // router.route("/all").get(auth,articleController.getAllArticle);
 
 /////////////////////////////////////////////
 ///////// GET SINGLE Article /////////////////
 ///////////////////////////////////////////
 
-router.route("/:id").get(auth, articleController.getSingleArticle);
+router.route("/:id").get(articleController.getSingleArticle);
 // router.route("/get-single").get(auth,articleController.getSingleArticle);
 
 /////////////////////////////////////////////
 ///////// Remove Article /////////////////
 ///////////////////////////////////////////
 
-router.route("/get-single").delete(auth, articleController.getSingleArticle);
+router.route("/:id").delete(auth, articleController.removeArticle);
 
 module.exports = router;

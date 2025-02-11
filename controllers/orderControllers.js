@@ -169,8 +169,7 @@ exports.nearToExpiredOrder = tryCatcheHanlder(async (req, res, next) => {
     status: "active",
   });
 
-  console.log(orders[1].expiry_date, "order list");
-
+  
   let arr = [];
   for (var i = 0; i < orders.length; i++) {
     // Calculate the service end date
