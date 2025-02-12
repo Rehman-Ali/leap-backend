@@ -1,7 +1,7 @@
 const { Article } = require("../modal/article");
 const tryCatcheHanlder = require("../utils/tryCatch");
 
-const cloudinary = require('cloudinary').v2;
+const cloudinary = require("cloudinary").v2;
 
 ////////////////////////////////////////
 /////////// Create Article 👤 ///////////
@@ -33,8 +33,8 @@ const cloudinary = require('cloudinary').v2;
 // });
 
 exports.createArticle = tryCatcheHanlder(async (req, res, next) => {
-  console.log('Received files:', req.file);
-  console.log('Received body:', req.body);
+  console.log("Received files:", req.file);
+  console.log("Received body:", req.body);
 
   // Check if file exists first
   if (!req.file) {
@@ -47,10 +47,10 @@ exports.createArticle = tryCatcheHanlder(async (req, res, next) => {
   // Upload to Cloudinary
   const result = await new Promise((resolve, reject) => {
     const uploadStream = cloudinary.uploader.upload_stream(
-      { resource_type: 'auto' },
-      (error, result) => error ? reject(error) : resolve(result)
+      { resource_type: "auto" },
+      (error, result) => (error ? reject(error) : resolve(result))
     );
-    
+
     uploadStream.end(req.file.buffer);
   });
 
@@ -102,4 +102,56 @@ exports.removeArticle = tryCatcheHanlder(async (req, res, next) => {
   return res
     .status(200)
     .json({ success: 1, message: "Article deleted successfully" });
+});
+
+////////////////////////////////////////
+/////////// UPDATE Article 👤 ///////////
+//////////////////////////////////////
+
+exports.updateArticle = tryCatcheHanlder(async (req, res, next) => {
+  // Check if file exists first
+  if (!req.file) {
+    await Article.updateOne(
+      { _id: req.params.id },
+      {
+        $set: req.body
+      },
+      { new: true }
+    );
+    return res.status(200).json({
+      success: 1,
+      message: "Article has been updated successfully"
+    });
+  }
+
+  // Upload to Cloudinary
+  const result = await new Promise((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      { resource_type: "auto" },
+      (error, result) => (error ? reject(error) : resolve(result))
+    );
+
+    uploadStream.end(req.file.buffer);
+  });
+
+  // update article
+  // const article = await Article.create({
+  //   ...req.body,
+  //   image_url: result.secure_url
+  // });
+  await Article.updateOne(
+    { _id: req.params.id },
+    {
+      $set: {
+        ...req.body,
+        image_url: result.secure_url
+      }
+    },
+    { new: true }
+  );
+
+  return res.status(201).json({
+    success: 1,
+    message: "Article created successfully"
+  });
 });
