@@ -204,19 +204,22 @@ exports.nearToExpiredOrder = tryCatcheHanlder(async (req, res, next) => {
 /////////// CHECK ORDER EXPIRY 👤 ///////////
 ////////////////////////////////////////////
 exports.getAllOrderExpiry = tryCatcheHanlder(async (req, res, next) => {
-  const now = new Date();
-  
-  // Find subscriptions that are expired and set them to inactive
-  const expiredSubscriptions = await Order.updateMany(
-    { _id: "67a789073df65246eb38c966" },
-    // { expiry_date: now.toISOString().split("T")[0] + "T19:00:00.000+00:00" , status: 'active' },
-    { $set: { status: 'inactive' } }
-  );
+  try {
+    const now = new Date();
+    const expiredSubscriptions = await Order.updateMany(
+      { _id: "67a789073df65246eb38c966" },
+      // { expiry_date: now.toISOString().split("T")[0] + "T19:00:00.000+00:00", status: 'active' },
+      { $set: { status: "active" } }
+    );
 
+    console.log(`${expiredSubscriptions.modifiedCount} subscriptions inactivated.`);
 
-
-
-
-  console.log(`${expiredSubscriptions.modifiedCount} subscriptions inactivated.`);
-
+    return res.status(200).json({
+      success: true,
+      message: `${expiredSubscriptions.modifiedCount} subscriptions inactivated.`,
+    });
+  } catch (error) {
+    console.error("Error updating subscriptions:", error);
+    return res.status(500).json({ success: false, error: error.message });
+  }
 });
