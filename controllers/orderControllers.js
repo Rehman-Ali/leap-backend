@@ -2,7 +2,7 @@ const { Order, validate } = require("../modal/order");
 const { User } = require("../modal/user");
 const tryCatcheHanlder = require("../utils/tryCatch");
 const axios = require("axios");
-const cron = require('node-cron');
+const { v4: uuidv4 } = require('uuid');
 // Replace with your Discord webhook URL
 const DISCORD_WEBHOOK_URL = "https://canary.discord.com/api/webhooks/1338613668241211412/eE399Z9LoZ4NcUkxOAOoXBlrDk02c-gW-OBdj1QqMfMukMI3ZgU35rF5HGcjMRMdEsQP";
   // "https://discord.com/api/webhooks/1338599658196566066/yzpTN2UbGrfRNJT3WfBFQn7WDzgZhcWWpok7QFks6DFe2h3FPDI7i8U3cn9nSplTpfap";
@@ -60,7 +60,7 @@ exports.createOrder = tryCatcheHanlder(async (req, res, next) => {
   }
 
   // if user new then save it to database and allow him to login
-  const order = await Order.create({ ...req.body, user_id: req.user.user_id , api_key: generateCustomUUID()});
+  const order = await Order.create({ ...req.body, user_id: req.user.user_id , api_key:uuidv4()});
 
   // Send notification to Discord
   await sendDiscordNotification(order);
