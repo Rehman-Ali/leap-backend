@@ -207,8 +207,7 @@ exports.getAllOrderExpiry = tryCatcheHanlder(async (req, res, next) => {
   try {
     const now = new Date();
     const expiredSubscriptions = await Order.updateMany(
-      { _id: "67a789073df65246eb38c966" },
-      // { expiry_date: now.toISOString().split("T")[0] + "T19:00:00.000+00:00", status: 'active' },
+      { expiry_date: now.toISOString().split("T")[0] + "T19:00:00.000+00:00", status: 'active' },
       { $set: { status: "active" } }
     );
 
