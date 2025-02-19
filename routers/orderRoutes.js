@@ -40,4 +40,13 @@ router.route("/update/:id").put(auth, orderController.updateOrder);
 
 router.route("/near-to-expire").get(auth, orderController.nearToExpiredOrder);
 
+
+
+///////////////////////////////////////////////////////////////////////////
+///////// CHECK EXPIRY DATE AND INACTIVE THE ORDER ///////////////////////
+/////////////////////////////////////////////////////////////////////////
+
+router.route("/check-expiry").get(orderController.getAllOrderExpiry);
+
+
 module.exports = router;

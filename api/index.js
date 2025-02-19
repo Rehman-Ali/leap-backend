@@ -10,8 +10,6 @@ const homePageRoute = require("../routers/index");
 const userRoute = require("../routers/userRoutes");
 const orderRoute = require("../routers/orderRoutes");
 const articleRoute = require("../routers/articleRoutes");
-const cron = require('node-cron');
-const { Order } = require("../modal/order");
 const cloudinary = require('cloudinary').v2;
 const app = express();
 
@@ -36,22 +34,23 @@ cloudinary.config({
 
 // Run every day at midnight
 // cron.schedule('*/1 * * * *', async () => {
-cron.schedule('0 0 * * *', async () => {
-  console.log('Running subscription check...');
-  const now = new Date();
+// // cron.schedule('0 0 * * *', async () => {
+//   console.log('Running subscription check...');
+//   const now = new Date();
   
-   let order = await Order.find(
-    { expiry_date: now.toISOString().split("T")[0] + "T19:00:00.000+00:00" , status: 'active' },
-   )
+//    let order = await Order.find(
+//     { expiry_date: now.toISOString().split("T")[0] + "T19:00:00.000+00:00" , status: 'active' },
+//    )
 
-  // Find subscriptions that are expired and set them to inactive
-  const expiredSubscriptions = await Order.updateMany(
-    { expiry_date: now.toISOString().split("T")[0] + "T19:00:00.000+00:00" , status: 'active' },
-    { $set: { status: 'inactive' } }
-  );
+//   // Find subscriptions that are expired and set them to inactive
+//   const expiredSubscriptions = await Order.updateMany(
+//     { expiry_date: now.toISOString().split("T")[0] + "T19:00:00.000+00:00" , status: 'active' },
+//     { $set: { status: 'inactive' } }
+//   );
 
-  console.log(`${expiredSubscriptions.modifiedCount} subscriptions inactivated.`);
-});
+//   console.log(`${expiredSubscriptions.modifiedCount} subscriptions inactivated.`);
+// });
+
 
 
 

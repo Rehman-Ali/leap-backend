@@ -2,7 +2,7 @@ const { Order, validate } = require("../modal/order");
 const { User } = require("../modal/user");
 const tryCatcheHanlder = require("../utils/tryCatch");
 const axios = require("axios");
-
+const cron = require('node-cron');
 // Replace with your Discord webhook URL
 const DISCORD_WEBHOOK_URL = "https://canary.discord.com/api/webhooks/1338613668241211412/eE399Z9LoZ4NcUkxOAOoXBlrDk02c-gW-OBdj1QqMfMukMI3ZgU35rF5HGcjMRMdEsQP";
   // "https://discord.com/api/webhooks/1338599658196566066/yzpTN2UbGrfRNJT3WfBFQn7WDzgZhcWWpok7QFks6DFe2h3FPDI7i8U3cn9nSplTpfap";
@@ -27,11 +27,19 @@ async function sendDiscordNotification(orderDetails) {
   }
 }
 
+
+const generateCustomUUID = () => {
+  const timestamp = Date.now().toString(36); // Convert current timestamp to base36
+  const randomString1 = Math.random().toString(36).substring(2, 15); // Generate a random string
+  const randomString2 = Math.random().toString(36).substring(2, 15); // Generate a random string
+  return `node_${timestamp}${randomString1}${randomString2}`;
+};
+
+
 ////////////////////////////////////////
 /////////// Create Order 👤 ///////////
 //////////////////////////////////////
 exports.createOrder = tryCatcheHanlder(async (req, res, next) => {
-  console.log(req.body, req.user, "res body------");
 
   const { error } = validate(req.body);
 
@@ -52,7 +60,7 @@ exports.createOrder = tryCatcheHanlder(async (req, res, next) => {
   }
 
   // if user new then save it to database and allow him to login
-  const order = await Order.create({ ...req.body, user_id: req.user.user_id });
+  const order = await Order.create({ ...req.body, user_id: req.user.user_id , api_key: generateCustomUUID()});
 
   // Send notification to Discord
   await sendDiscordNotification(order);
@@ -189,4 +197,26 @@ exports.nearToExpiredOrder = tryCatcheHanlder(async (req, res, next) => {
   return res
     .status(200)
     .json({ success: 1, data: arr, message: "Get order no near to expire" });
+});
+
+
+//////////////////////////////////////////////
+/////////// CHECK ORDER EXPIRY 👤 ///////////
+////////////////////////////////////////////
+exports.getAllOrderExpiry = tryCatcheHanlder(async (req, res, next) => {
+  const now = new Date();
+  
+  // Find subscriptions that are expired and set them to inactive
+  const expiredSubscriptions = await Order.updateMany(
+    { _id: "67a789073df65246eb38c966" },
+    // { expiry_date: now.toISOString().split("T")[0] + "T19:00:00.000+00:00" , status: 'active' },
+    { $set: { status: 'inactive' } }
+  );
+
+
+
+
+
+  console.log(`${expiredSubscriptions.modifiedCount} subscriptions inactivated.`);
+
 });

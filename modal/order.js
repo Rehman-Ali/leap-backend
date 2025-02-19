@@ -41,6 +41,9 @@ const OrderSchema = new mongoose.Schema(
     },
     expiry_date:{
       type: Date
+    },
+    api_key:{
+      type: String
     }
   },
   { timestamps: true }
@@ -60,6 +63,7 @@ function validateOrder(order) {
     region: Joi.string(),
     plan: Joi.string(),
     expiry_date: Joi.date(),
+    api_key: Joi.string(),
   });
   return schema.validate(order);
 }
