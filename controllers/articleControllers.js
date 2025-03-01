@@ -33,8 +33,7 @@ const cloudinary = require("cloudinary").v2;
 // });
 
 exports.createArticle = tryCatcheHanlder(async (req, res, next) => {
-  console.log("Received files:", req.file);
-  console.log("Received body:", req.body);
+
 
   // Check if file exists first
   if (!req.file) {
