@@ -4,8 +4,8 @@ const tryCatcheHanlder = require("../utils/tryCatch");
 const axios = require("axios");
 const { v4: uuidv4 } = require('uuid');
 // Replace with your Discord webhook URL
-const DISCORD_WEBHOOK_URL = "https://canary.discord.com/api/webhooks/1338613668241211412/eE399Z9LoZ4NcUkxOAOoXBlrDk02c-gW-OBdj1QqMfMukMI3ZgU35rF5HGcjMRMdEsQP";
-  // "https://discord.com/api/webhooks/1338599658196566066/yzpTN2UbGrfRNJT3WfBFQn7WDzgZhcWWpok7QFks6DFe2h3FPDI7i8U3cn9nSplTpfap";
+const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1345489919438749807/CTlghvWGcLlwmTySNE7cc2sBE6PYdqXyvvxFbtadNv2NF73-kxnPe1II1LcLaPLIT4E9";
+
 
 async function sendDiscordNotification(orderDetails) {
   try {
