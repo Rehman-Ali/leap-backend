@@ -74,7 +74,7 @@ exports.createOrder = tryCatcheHanlder(async (req, res, next) => {
 /////////// GET all Order 👤 ///////////
 //////////////////////////////////////
 exports.getAllOrder = tryCatcheHanlder(async (req, res, next) => {
-  const orders = await Order.find();
+  const orders = await Order.find().sort({createdAt: -1});
   let arr = [];
 
   for (var i = 0; i < orders.length; i++) {
@@ -119,7 +119,7 @@ exports.getAllUserOrder = tryCatcheHanlder(async (req, res, next) => {
   const orders = await Order.find({
     user_id: req.user.user_id,
     status: { $ne: "cancelled" }, // Exclude orders with status 'cancelled'
-  });
+  }).sort({createdAt: -1});
   let arr = [];
 
   for (var i = 0; i < orders.length; i++) {
