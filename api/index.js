@@ -9,7 +9,6 @@ const http = require("http");
 const homePageRoute = require("../routers/index");
 const userRoute = require("../routers/userRoutes");
 const orderRoute = require("../routers/orderRoutes");
-const articleRoute = require("../routers/articleRoutes");
 const cloudinary = require('cloudinary').v2;
 const app = express();
 
@@ -58,7 +57,7 @@ cloudinary.config({
 app.use("/", homePageRoute);
 app.use("/api/user", userRoute);
 app.use("/api/order", orderRoute);
-app.use("/api/article", articleRoute);
+
 /////////////////////////////////////////////////
 
 
