@@ -27,7 +27,6 @@ const createSendToken = (user, res) => {
 ////// SING UP / REGISTER USER 👤 ////
 //////////////////////////////////////
 exports.singinAndSignup = tryCatcheHanlder(async (req, res, next) => {
-  console.log(req.body, "res body------");
 
   const { error } = validate(req.body);
 
