@@ -17,7 +17,7 @@ async function sendDiscordNotification(orderDetails) {
       **Duration:** ${orderDetails.duration / 30} month\n
       **Total USD:** $${orderDetails.price}\n
       **Total SOL:** ${orderDetails.price_in_SOL} SOL\n
-      **Date:** ${new Date().toLocaleString()}`
+      **Date:** ${new Date().toLocaleString()}`,
     };
 
     await axios.post(DISCORD_WEBHOOK_URL, message);
@@ -36,12 +36,12 @@ exports.createOrder = tryCatcheHanlder(async (req, res, next) => {
   if (error) {
     return res.status(400).json({
       message: "Invalid data",
-      error: error
+      error: error,
     });
   }
 
   const userExited = await User.findOne({
-    _id: req.user.user_id
+    _id: req.user.user_id,
   });
 
   /// if user exist simple allow to him to login
@@ -49,19 +49,31 @@ exports.createOrder = tryCatcheHanlder(async (req, res, next) => {
     return res.status(400).json({ success: 0, message: "user is not existed" });
   }
 
-  // if user new then save it to database and allow him to login
+  console.log(userExited, "req.body.email");
+  /// if user request for free node and we check if it claim already or not
+  if (req.body.order_category === "RPC-free") {
+    const claimExited = await Order.findOne({ user_id: userExited._id});
+    if (claimExited !== null) {
+      return res
+        .status(400)
+        .json({ success: 0, message: "You already claimed free one." });
+    }
+  }
+
+  //if user new then save it to database and allow him to login
   const order = await Order.create({
     ...req.body,
     user_id: req.user.user_id,
-    api_key: uuidv4()
+    api_key: uuidv4(),
   });
 
-  // Send notification to Discord
+ // Send notification to Discord
   await sendDiscordNotification(order);
 
   return res
     .status(200)
     .json({ success: 1, data: order, message: "Order is added successfully" });
+
 });
 
 ////////////////////////////////////////
@@ -98,7 +110,7 @@ exports.getAllOrder = tryCatcheHanlder(async (req, res, next) => {
 //////////////////////////////////////
 exports.getSingleOrder = tryCatcheHanlder(async (req, res, next) => {
   const orders = await Order.findOne({
-    _id: req.params.id
+    _id: req.params.id,
   });
 
   return res
@@ -112,7 +124,7 @@ exports.getSingleOrder = tryCatcheHanlder(async (req, res, next) => {
 exports.getAllUserOrder = tryCatcheHanlder(async (req, res, next) => {
   const orders = await Order.find({
     user_id: req.user.user_id,
-    status: { $ne: "cancelled" } // Exclude orders with status 'cancelled'
+    status: { $ne: "cancelled" }, // Exclude orders with status 'cancelled'
   }).sort({ createdAt: -1 });
   let arr = [];
 
@@ -141,26 +153,7 @@ exports.getAllUserOrder = tryCatcheHanlder(async (req, res, next) => {
 ////////////////////////////////////////
 /////////// Update Order 👤 ///////////
 //////////////////////////////////////
-// exports.updateOrder = tryCatcheHanlder(async (req, res, next) => {
-//   let order = await Order.findOne({ _id: req.params.id });
-//   if (!order)
-//     return res
-//       .status(400)
-//       .json({ success: 0, message: "No such order exists." });
 
-//   let updateOder = await Order.updateOne(
-//     { _id: req.params.id },
-//     {
-//       $set: req.body,
-//     },
-//     { new: true }
-//   );
-//   return res.status(200).json({
-//     success: 1,
-//     message: "Order has been updated successfully",
-//     data: updateOder,
-//   });
-// });
 exports.updateOrder = tryCatcheHanlder(async (req, res, next) => {
   // Find the order by ID
   let order = await Order.findOne({ _id: req.params.id });
@@ -195,8 +188,8 @@ exports.updateOrder = tryCatcheHanlder(async (req, res, next) => {
       $set: {
         expiry_date: newExpiryDate,
         status: "active", // Set status to active when renewing
-        ...req.body // Include other fields that might be updated
-      }
+        ...req.body, // Include other fields that might be updated
+      },
     },
     { new: true }
   );
@@ -204,9 +197,41 @@ exports.updateOrder = tryCatcheHanlder(async (req, res, next) => {
   return res.status(200).json({
     success: 1,
     message: "Order has been renewed successfully",
-    data: updateOder
+    data: updateOder,
   });
 });
+
+/////////////////////////////////////////
+///////// Cancelled Order /////////////
+///////////////////////////////////////
+
+////////////////////////////////////////
+/////////// Update Order 👤 ///////////
+//////////////////////////////////////
+exports.canCelledOrder = tryCatcheHanlder(async (req, res, next) => {
+  let order = await Order.findOne({ _id: req.params.id });
+  if (!order)
+    return res
+      .status(400)
+      .json({ success: 0, message: "No such order exists." });
+
+  let updateOder = await Order.updateOne(
+    { _id: req.params.id },
+    {
+      $set: req.body,
+    },
+    { new: true }
+  );
+  return res.status(200).json({
+    success: 1,
+    message: "Order has been removed successfully",
+    data: updateOder,
+  });
+});
+
+
+
+
 
 ////////////////////////////////////////////
 ///////// Extend & Reduced Order Expiry
@@ -253,12 +278,10 @@ exports.extentReducedOrderExpiry = tryCatcheHanlder(async (req, res, next) => {
       // Subtract days
       newExpiryDate.setDate(newExpiryDate.getDate() - durationDays);
     } else {
-      return res
-        .status(400)
-        .json({
-          success: 0,
-          message: "actionType must be either 'extended' or 'reduced'."
-        });
+      return res.status(400).json({
+        success: 0,
+        message: "actionType must be either 'extended' or 'reduced'.",
+      });
     }
 
     console.log(newExpiryDate, "newExpiryDate after adjustment");
@@ -269,7 +292,7 @@ exports.extentReducedOrderExpiry = tryCatcheHanlder(async (req, res, next) => {
     // Create update object
     const updateData = {
       expiry_date: newExpiryDate,
-      status: status
+      status: status,
     };
 
     // Add any other fields from req.body, but exclude actionType and duration
@@ -286,9 +309,9 @@ exports.extentReducedOrderExpiry = tryCatcheHanlder(async (req, res, next) => {
     return res.status(200).json({
       success: 1,
       message: `Order expiry date has been ${req.body.actionType} by ${durationDays} days successfully`,
-      data: updatedOrder
+      data: updatedOrder,
     });
-  } 
+  }
 });
 
 /////////////////////////////////////////////////
@@ -297,7 +320,7 @@ exports.extentReducedOrderExpiry = tryCatcheHanlder(async (req, res, next) => {
 exports.nearToExpiredOrder = tryCatcheHanlder(async (req, res, next) => {
   const orders = await Order.find({
     user_id: req.user.user_id,
-    status: "active"
+    status: "active",
   });
 
   let arr = [];
@@ -330,7 +353,7 @@ exports.getAllOrderExpiry = tryCatcheHanlder(async (req, res, next) => {
     const expiredSubscriptions = await Order.updateMany(
       {
         expiry_date: now.toISOString().split("T")[0] + "T19:00:00.000+00:00",
-        status: "active"
+        status: "active",
       },
       { $set: { status: "active" } }
     );
@@ -341,7 +364,7 @@ exports.getAllOrderExpiry = tryCatcheHanlder(async (req, res, next) => {
 
     return res.status(200).json({
       success: true,
-      message: `${expiredSubscriptions.modifiedCount} subscriptions inactivated.`
+      message: `${expiredSubscriptions.modifiedCount} subscriptions inactivated.`,
     });
   } catch (error) {
     console.error("Error updating subscriptions:", error);

@@ -68,16 +68,16 @@ app.use("/api/invoice", invoiceRoute);
 
 
 //////********** FOR Local Host ******//////////////
-// const PORT = process.env.PORT || "5000";
-// app.set("port", PORT);
+const PORT = process.env.PORT || "5000";
+app.set("port", PORT);
 
-// var server = http.createServer(app);
-// server.on("listening", () => console.log("APP IS RUNNING ON PORT " + PORT));
+var server = http.createServer(app);
+server.on("listening", () => console.log("APP IS RUNNING ON PORT " + PORT));
 
-// server.listen(PORT);
+server.listen(PORT);
 
 
 
 
 //// for vercel deployment///////
-module.exports = app; // Export the Express app
+// module.exports = app; // Export the Express app

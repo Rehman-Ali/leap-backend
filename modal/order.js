@@ -38,6 +38,10 @@ const OrderSchema = new mongoose.Schema(
     plan:{
       type: String
     },
+    usage_used:{
+      type: Number,
+      default: null
+    },
     expiry_date:{
       type: Date
     },
@@ -63,6 +67,7 @@ function validateOrder(order) {
     plan: Joi.string(),
     expiry_date: Joi.date(),
     api_key: Joi.string(),
+    usage_used: Joi.number().allow(null)
   });
   return schema.validate(order);
 }
