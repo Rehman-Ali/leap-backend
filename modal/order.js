@@ -76,7 +76,7 @@ function validateOrder(order) {
     expiry_date: Joi.date(),
     api_key: Joi.string(),
     usage_used: Joi.number().allow(null),
-    is_free: Joi.boolean(),
+    is_free_tier: Joi.boolean(),
     order_region: Joi.string()
   });
   return schema.validate(order);
