@@ -47,7 +47,15 @@ const OrderSchema = new mongoose.Schema(
     },
     api_key:{
       type: String
+    },
+    is_free_tier :{
+      type: Boolean
+    },
+    order_region:{
+      type: String
     }
+
+
   },
   { timestamps: true }
 );
@@ -67,7 +75,9 @@ function validateOrder(order) {
     plan: Joi.string(),
     expiry_date: Joi.date(),
     api_key: Joi.string(),
-    usage_used: Joi.number().allow(null)
+    usage_used: Joi.number().allow(null),
+    is_free: Joi.boolean(),
+    order_region: Joi.string()
   });
   return schema.validate(order);
 }
